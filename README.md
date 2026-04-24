@@ -97,6 +97,7 @@ How to use the public `TotalResources` bridge module:
 
 - The native apps themselves are not fully mirrored here.
 - This repository currently focuses on the public bridge layer.
+- The files published in this repository are released under the MIT license. See [LICENSE](./LICENSE).
 
 ## Brand note
 
