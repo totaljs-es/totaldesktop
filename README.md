@@ -2,7 +2,7 @@
 
 `TotalDesktop` is the native app suite from **Spanish Total.js** for teams building with [Total.js](https://www.totaljs.com/).
 
-This public repository is the shareable layer of the suite: bridge modules, public docs, and lightweight assets that make sense outside the private app workspace itself.
+This public repository contains public bridge modules, lightweight assets, and product links for the TotalDesktop suite.
 
 Right now the first published module is **TotalResources**.
 
@@ -42,9 +42,7 @@ The suite is designed to support:
 - AI-assisted workflows
 - product-specific bridges that keep the native app as the source of truth
 
-## Public focus today
-
-The current public module is **TotalResources**.
+## TotalResources
 
 `TotalResources` is the translation workspace of the suite. It helps teams manage multilingual content, project context, AI-assisted review, snapshots, and safer publishing from one native workspace.
 
@@ -79,19 +77,15 @@ In short:
 - the app owns the state
 - the bridge exposes a safe, focused surface
 
-For `TotalResources`, this bridge is the key public piece: it connects your Total.js project to the native app workflow in a way that stays close to the app, the project, and the real source of truth.
+For `TotalResources`, the bridge connects a Total.js project with the native desktop workflow.
 
-## MCP ecosystem
-
-`TotalDesktop` also powers hosted MCP workflows through:
+## MCP
 
 - [mcp.totaljs.es](https://mcp.totaljs.es)
 
-That hosted layer is part of the wider product ecosystem, but the main public focus of this repository is still the **bridge module** that connects a Total.js project with the native desktop app.
-
 ## Getting started
 
-If you want to experiment with the public `TotalResources` module:
+How to use the public `TotalResources` bridge module:
 
 1. Clone this repository locally.
 2. Copy [Bridge/totalresources-bridge.js](./Bridge/totalresources-bridge.js) into your Total.js project, usually inside `modules/`.
@@ -102,11 +96,10 @@ If you want to experiment with the public `TotalResources` module:
 ## Notes
 
 - The native apps themselves are not fully mirrored here.
-- This repository only publishes the bridge-facing pieces that make sense to share publicly.
-- MCP support is part of the private product integration layer and is not published here yet.
+- This repository currently focuses on the public bridge layer.
 
 ## Brand note
 
-`Total.js` is [totaljs.com](https://www.totaljs.com/), the original framework and the main ecosystem behind everything here.
+`Total.js` is [totaljs.com](https://www.totaljs.com/), the original framework and the main ecosystem behind this suite.
 
-`Spanish Total.js` is [totaljs.es](https://totaljs.es/), a Spanish Total.js delegation focused on apps, product pages, support, and giving more love to the Total.js ecosystem.
+`Spanish Total.js` is [totaljs.es](https://totaljs.es/), a Spanish Total.js delegation focused on apps, product pages, support, and operated services built around the Total.js ecosystem.
