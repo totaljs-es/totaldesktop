@@ -8,11 +8,26 @@ Right now the first published module is **TotalResources**.
 
 ## Suite overview
 
-| App | Status | Product page |
-| --- | --- | --- |
-| ![TotalResources](./Assets/icons/totalresources.webp) **TotalResources** | Public bridge module | [totaljs.es/totalresources](https://totaljs.es/totalresources) |
-| ![TotalCode](./Assets/icons/totalcode.webp) **TotalCode** | Product in progress | [totaljs.es/totalcode](https://totaljs.es/totalcode) |
-| ![TotalMonitor](./Assets/icons/totalmonitor.webp) **TotalMonitor** | Product in progress | [totaljs.es/totalmonitor](https://totaljs.es/totalmonitor) |
+### TotalResources
+
+![TotalResources](./Assets/icons/totalresources.webp)
+
+- Status: Public bridge module
+- Product page: [totaljs.es/totalresources](https://totaljs.es/totalresources)
+
+### TotalCode
+
+![TotalCode](./Assets/icons/totalcode.webp)
+
+- Status: Product in progress
+- Product page: [totaljs.es/totalcode](https://totaljs.es/totalcode)
+
+### TotalMonitor
+
+![TotalMonitor](./Assets/icons/totalmonitor.webp)
+
+- Status: Product in progress
+- Product page: [totaljs.es/totalmonitor](https://totaljs.es/totalmonitor)
 
 ## What TotalDesktop is
 
@@ -74,23 +89,15 @@ For `TotalResources`, this bridge is the key public piece: it connects your Tota
 
 That hosted layer is part of the wider product ecosystem, but the main public focus of this repository is still the **bridge module** that connects a Total.js project with the native desktop app.
 
-## Published files
-
-Current public files:
-
-- [Bridge/totalresources-bridge.js](./Bridge/totalresources-bridge.js)
-- [Assets/icons/totalresources.webp](./Assets/icons/totalresources.webp)
-- [Assets/icons/totalcode.webp](./Assets/icons/totalcode.webp)
-- [Assets/icons/totalmonitor.webp](./Assets/icons/totalmonitor.webp)
-
 ## Getting started
 
 If you want to experiment with the public `TotalResources` module:
 
 1. Clone this repository locally.
-2. Open [Bridge/totalresources-bridge.js](./Bridge/totalresources-bridge.js).
-3. Configure the route prefix and desktop token inside your Total.js app.
-4. Publish the bridge from your app-side integration.
+2. Copy [Bridge/totalresources-bridge.js](./Bridge/totalresources-bridge.js) into your Total.js project, usually inside `modules/`.
+3. Define `CONF.desktop_token` in your app so the bridge is protected.
+4. Optionally define `CONF.desktop_url` if you want a different route prefix. The default prefix is `/$desktop/`.
+5. Restart the app and connect the native TotalResources workflow to your project through that bridge surface.
 
 ## Notes
 
@@ -100,7 +107,6 @@ If you want to experiment with the public `TotalResources` module:
 
 ## Brand note
 
-This repository follows the same product rule as the rest of the suite:
+`Total.js` is [totaljs.com](https://www.totaljs.com/), the original framework and the main ecosystem behind everything here.
 
-- `Total.js` refers to the framework and ecosystem
-- `Spanish Total.js` refers to the apps, product pages, support, and operated services
+`Spanish Total.js` is [totaljs.es](https://totaljs.es/), a Spanish Total.js delegation focused on apps, product pages, support, and giving more love to the Total.js ecosystem.
