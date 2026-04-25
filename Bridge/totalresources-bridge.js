@@ -1,13 +1,11 @@
 // Total.js bridge module for the TotalResources native app.
 // Default route prefix: /$desktop/{what}
 
+
 const desktop_token = CONF.desktop_token || '';
 const desktop_url = normalizeDesktopURL(CONF.desktop_url || '/$desktop/');
 
-var Total = global.Total || F;
-
-if (!F.is5)
-	$ = this;
+var Total = Total || F;
 
 exports.install = function() {
 	ROUTE('GET ' + desktop_url + 'resources_init', resources_init);
@@ -16,7 +14,12 @@ exports.install = function() {
 };
 
 function authorize($) {
-	if (!desktop_token || BLOCKED($, 20)) {
+	if (!desktop_token) {
+		$.invalid(401);
+		return false;
+	}
+
+	if (BLOCKED($, 20)) {
 		$.invalid(401);
 		return false;
 	}
@@ -36,18 +39,24 @@ function normalizeDesktopURL(url) {
 }
 
 function resources_init($) {
-	if (authorize($))
-		init($);
+	if (!authorize($))
+		return;
+
+	init($);
 }
 
 function resources_read_endpoint($) {
-	if (authorize($))
-		resources_read($);
+	if (!authorize($))
+		return;
+
+	resources_read($);
 }
 
 function resources_save_endpoint($) {
-	if (authorize($))
-		resources_save($);
+	if (!authorize($))
+		return;
+
+	resources_save($);
 }
 
 function init($) {
@@ -68,7 +77,7 @@ function resources_read($) {
 		for (var i = 0; i < files.length; i++) {
 			var filename = files[i];
 
-			if (filename.startsWith(PATH.root('node_modules')) || filename.startsWith(PATH.modules()) || filename.endsWith(PATH.public('js/spa.min@20.js')))
+			if (filename.startsWith(PATH.root('node_modules')) || filename.startsWith(PATH.modules()) || filename.endsWith('spa.min@20.js') || filename.endsWith('spa.min@19.js'))
 				continue;
 
 			if (!isresourcefile(filename))
@@ -86,7 +95,11 @@ function resources_read($) {
 			items.push({ hash: hash, text: unique[hash] });
 
 		items.quicksort('hash');
-		$.json({ success: true, items: items });
+
+		$.json({
+			success: true,
+			items: items
+		});
 	}, function(filename, isdir) {
 		return isdir ? true : isresourcefile(filename);
 	});
@@ -94,18 +107,18 @@ function resources_read($) {
 
 function resources_save($) {
 	var body = $.body || '';
-	var language = body.language.toLowerCase() || '';
+	var language = (body.language || '').toLowerCase();
 	var resource = body.resource || '';
 
-	if (!language || !resource) {
+	if (!language || !/^[a-z]{2}(?:_[a-z]{2,4})?$/.test(language) || !resource) {
 		$.invalid(400);
 		return;
 	}
 
 	var filename = language + '.resource';
-	var filepath = PATH.root('resources/' + filename);
+	var path = PATH.root('resources/' + filename);
 
-	Total.Fs.writeFile(filepath, resource, function(err) {
+	Total.Fs.writeFile(path, resource, function(err) {
 		if (err) {
 			$.invalid(400);
 			return;
