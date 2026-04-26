@@ -21,7 +21,7 @@ Right now the first published module is **TotalResources**.
 
 - Status: Product in progress
 - Product page: [totaljs.es/totalcode](https://totaljs.es/totalcode)
-- * The bridge module is not required.
+- The bridge module is not required.
 
 ### TotalMonitor
 
