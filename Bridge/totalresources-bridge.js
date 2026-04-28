@@ -110,8 +110,6 @@ function resources_save($) {
 	var language = (body.language || '').toLowerCase();
 	var resource = body.resource || '';
 
-	// Strict allow-list: en, es, pt_br, pt_pt, zh_hans, etc.
-	// Rejects path traversal attempts like '../config' or '/etc/passwd'.
 	if (!language || !/^[a-z]{2}(?:_[a-z]{2,4})?$/.test(language) || !resource) {
 		$.invalid(400);
 		return;
