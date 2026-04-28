@@ -1,17 +1,17 @@
 // Total.js bridge module for the TotalResources native app.
 // Default route prefix: /$desktop/{what}
 
-
 const desktop_token = CONF.desktop_token || '';
 const desktop_url = normalizeDesktopURL(CONF.desktop_url || '/$desktop/');
-
-var Total = Total || F;
 
 exports.install = function() {
 	ROUTE('GET ' + desktop_url + 'resources_init', resources_init);
 	ROUTE('GET ' + desktop_url + 'resources', resources_read_endpoint);
 	ROUTE('POST ' + desktop_url + 'resources', resources_save_endpoint);
 };
+
+var Total = Total || F;
+if (!F.is5) $ = this;
 
 function authorize($) {
 	if (!desktop_token) {
@@ -110,6 +110,8 @@ function resources_save($) {
 	var language = (body.language || '').toLowerCase();
 	var resource = body.resource || '';
 
+	// Strict allow-list: en, es, pt_br, pt_pt, zh_hans, etc.
+	// Rejects path traversal attempts like '../config' or '/etc/passwd'.
 	if (!language || !/^[a-z]{2}(?:_[a-z]{2,4})?$/.test(language) || !resource) {
 		$.invalid(400);
 		return;
