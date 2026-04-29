@@ -27,7 +27,7 @@ Right now the first published module is **TotalResources**.
 
 ![TotalMonitor](./Assets/icons/totalmonitor.webp)
 
-- Status: Product in progress
+- Status: Public bridge module
 - Product page: [totaljs.es/totalmonitor](https://totaljs.es/totalmonitor)
 
 ## What TotalDesktop is
