@@ -12,7 +12,7 @@ exports.install = function() {
 };
 
 var previouscpusnapshot = null;
-var Total = Total || F;
+var Total = global.Total || F;
 if (!F.is5)	$ = this;
 
 function authorize($) {
@@ -183,12 +183,12 @@ function buildlivepayload(bridgeProcessingMs) {
 }
 
 function getlivemetrics() {
-	var service = F.temporary && F.temporary.service ? F.temporary.service : {};
-	var request = F.stats && F.stats.request ? F.stats.request : {};
-	var response = F.stats && F.stats.response ? F.stats.response : {};
-	var performance = F.stats && F.stats.performance ? F.stats.performance : {};
-	var errors = F.errors && F.errors.length ? F.errors[F.errors.length - 1] : null;
-	var timeouts = F.timeouts && F.timeouts.length ? F.timeouts[F.timeouts.length - 1] : null;
+	var service = Total.temporary && Total.temporary.service ? Total.temporary.service : {};
+	var request = Total.stats && Total.stats.request ? Total.stats.request : {};
+	var response = Total.stats && Total.stats.response ? Total.stats.response : {};
+	var performance = Total.stats && Total.stats.performance ? Total.stats.performance : {};
+	var errors = Total.errors && Total.errors.length ? Total.errors[Total.errors.length - 1] : null;
+	var timeouts = Total.timeouts && Total.timeouts.length ? Total.timeouts[Total.timeouts.length - 1] : null;
 
 	return {
 		memoryMB: tonumber(process.memoryUsage().heapUsed),
@@ -196,7 +196,7 @@ function getlivemetrics() {
 		requestsTotal: request.request || 0,
 		pendingRequests: request.pending || 0,
 		externalPending: request.external || 0,
-		errorCount: F.stats ? (F.stats.error || 0) : 0,
+		errorCount: Total.stats ? (Total.stats.error || 0) : 0,
 		timeoutCount: response.timeout || 0,
 		onlineConnections: performance.online || 0,
 		downloadedMBTotal: fixednumber(request.size || 0, 3),

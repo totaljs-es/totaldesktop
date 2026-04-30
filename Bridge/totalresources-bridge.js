@@ -10,7 +10,7 @@ exports.install = function() {
 	ROUTE('POST ' + desktop_url + 'resources', resources_save_endpoint);
 };
 
-var Total = Total || F;
+var Total = global.Total || F;
 if (!F.is5) $ = this;
 
 function authorize($) {
