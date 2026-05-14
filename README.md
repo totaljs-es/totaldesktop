@@ -1,107 +1,127 @@
-# TotalDesktop
+# TotalResources Bridge
 
-`TotalDesktop` is the native app suite from **Spanish Total.js** for teams building with [Total.js](https://www.totaljs.com/).
+Public bridge module for connecting a Total.js application with **TotalResources**, the native workspace for managing multilingual Total.js projects.
 
-This public repository contains public bridge modules, lightweight assets, and product links for the TotalDesktop suite.
+TotalResources helps teams organize, translate, review, back up, and publish project resources from a focused native app for macOS and iPadOS.
 
-Right now the first published module is **TotalResources**.
+[![Download on the App Store](https://totaljs.es/img/appstore/en.svg)](https://apps.apple.com/app/totalresources/id6762512727)
 
-## Suite overview
+## Links
 
-### TotalResources
+- App Store: [TotalResources](https://apps.apple.com/app/totalresources/id6762512727)
+- Product page: [totaljs.es/totalresources](https://totaljs.es/en/totalresources/)
+- Privacy policy: [totaljs.es/totalresources/privacy](https://totaljs.es/en/totalresources/privacy/)
 
-![TotalResources](./Assets/icons/totalresources.webp)
+## What this repository contains
 
-- Status: Public bridge module
-- Product page: [totaljs.es/totalresources](https://totaljs.es/totalresources)
+This repository currently contains the public bridge module used by TotalResources:
 
-### TotalCode
+- [Bridge/totalresources-bridge.js](./Bridge/totalresources-bridge.js)
 
-![TotalCode](./Assets/icons/totalcode.webp)
+The native app itself is distributed through the App Store.
 
-- Status: Product in progress
-- Product page: [totaljs.es/totalcode](https://totaljs.es/totalcode)
-- The bridge module is not required
+## How the bridge works
 
-### TotalMonitor
+The bridge is a small Total.js module installed inside your Total.js application.
 
-![TotalMonitor](./Assets/icons/totalmonitor.webp)
+It exposes a protected API that TotalResources can use to:
 
-- Status: Public bridge module
-- Product page: [totaljs.es/totalmonitor](https://totaljs.es/totalmonitor)
+- read translatable strings from your project
+- inspect available resource keys
+- write updated `.resource` files back to your project
 
-## What TotalDesktop is
+The bridge is protected with a token. TotalResources must use the same token when connecting to your app.
 
-`TotalDesktop` is being built as a family of focused native tools around the Total.js ecosystem.
+## Installation
 
-The suite is designed to support:
+1. Download or clone this repository.
 
-- translation and content workflows
-- code and editing workflows
-- monitoring and runtime visibility
-- local-first storage
-- AI-assisted workflows
-- product-specific bridges that keep the native app as the source of truth
+2. Copy the bridge module into your Total.js app:
 
-## TotalResources
+```text
+Bridge/totalresources-bridge.js
+```
 
-`TotalResources` is the translation workspace of the suite. It helps teams manage multilingual content, project context, AI-assisted review, snapshots, and safer publishing from one native workspace.
+Place it inside the `modules` folder of your Total.js application:
 
-Product page:
+```text
+your-totaljs-app/
+  modules/
+    totalresources-bridge.js
+```
 
-- [https://totaljs.es/totalresources](https://totaljs.es/totalresources)
+3. Configure a private token in your Total.js app:
 
-Privacy policy:
+```js
+CONF.desktop_token = 'change-this-token';
+```
 
-- [https://totaljs.es/totalresources/privacy](https://totaljs.es/totalresources/privacy)
+4. Optionally configure the bridge route prefix:
 
-## Repository structure
+```js
+CONF.desktop_url = '/$desktop/';
+```
 
-- [Bridge](./Bridge)  
-  App-facing bridge modules used by TotalDesktop apps.
-- [Assets](./Assets)  
-  App icons used in this repository and public documentation.
+If `CONF.desktop_url` is not defined, the default route prefix is:
 
-## Bridge modules
+```text
+/$desktop/
+```
 
-Bridge modules are the integration layer between a TotalDesktop app and the outside world.
+5. Restart your Total.js application.
 
-They are meant to:
+## Connect from TotalResources
 
-- read state published by the native app
-- expose a controlled protocol surface
-- avoid coupling external tools directly to UI internals
-- keep the native app as the source of truth
+In TotalResources, open your project settings and configure:
 
-In short:
+- Bridge URL: the public or local URL of your Total.js app using the bridge route.
+- Token: the same value configured in `CONF.desktop_token`.
 
-- the app owns the state
-- the bridge exposes a safe, focused surface
+Example bridge URL:
 
-For `TotalResources`, the bridge connects a Total.js project with the native desktop workflow.
+```text
+https://your-domain.com/$desktop/
+```
 
-## MCP
+Local development example:
 
-- [mcp.totaljs.es](https://mcp.totaljs.es)
+```text
+http://localhost:8000/$desktop/
+```
 
-## Getting started
+TotalResources will use the bridge to read and publish your project resources.
 
-How to use the public `TotalResources` bridge module:
+## Available endpoints
 
-1. Clone this repository locally.
-2. Copy [Bridge/totalresources-bridge.js](./Bridge/totalresources-bridge.js) into your Total.js project, usually inside `modules/`.
-3. Define `CONF.desktop_token` in your app so the bridge is protected.
-4. Optionally define `CONF.desktop_url` if you want a different route prefix. The default prefix is `/$desktop/`.
-5. Restart the app and connect the native TotalResources workflow to your project through that bridge surface.
+With the default `CONF.desktop_url = '/$desktop/'`, the bridge exposes:
 
-## Notes
+```text
+GET  /$desktop/resources_init
+GET  /$desktop/resources
+POST /$desktop/resources
+```
 
-- The native apps themselves are not fully mirrored here.
-- This repository currently focuses on the public bridge layer.
-- The files published in this repository are released under the MIT license. See [LICENSE](./LICENSE).
+Requests must include the configured token in this header:
 
-## Brand note
+```text
+x-totaldesktop-token: change-this-token
+```
 
-`Total.js` is [totaljs.com](https://www.totaljs.com/), the original framework and the main ecosystem behind this suite.
+## Security notes
 
-`Spanish Total.js` is [totaljs.es](https://totaljs.es/), a Spanish Total.js delegation focused on apps, product pages, support, and operated services built around the Total.js ecosystem.
+- Always use a strong private token.
+- Do not commit real production tokens to your repository.
+- Use HTTPS for remote projects whenever possible.
+- Keep the bridge route private to your team and tools.
+- Remove or rotate the token if you believe it has been exposed.
+
+## License
+
+The public bridge module is released under the MIT license. See [LICENSE](./LICENSE).
+
+## About
+
+TotalResources is part of the TotalDesktop family by **Spanish Total.js**.
+
+- Spanish Total.js: [totaljs.es](https://totaljs.es)
+- Total.js framework: [totaljs.com](https://www.totaljs.com/)
