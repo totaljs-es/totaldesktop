@@ -50,16 +50,16 @@ your-totaljs-app/
     totalresources-bridge.js
 ```
 
-3. Configure a private token in your Total.js app:
+3. Configure a private token in your Total.js app config:
 
 ```js
-CONF.desktop_token = 'change-this-token';
+desktop_token : change-this-token
 ```
 
 4. Optionally configure the bridge route prefix:
 
 ```js
-CONF.desktop_url = '/$desktop/';
+desktop_url : /$desktop/
 ```
 
 If `CONF.desktop_url` is not defined, the default route prefix is:
