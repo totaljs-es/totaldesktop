@@ -1,6 +1,4 @@
 # TotalResources Bridge
-![(https://totaljs.es/img/totaldesktop/totalresources-icon.webp)]
-
 
 Public bridge module for connecting a Total.js application with **TotalResources**, the native workspace for managing multilingual Total.js projects.
 
