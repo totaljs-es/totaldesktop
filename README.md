@@ -12,8 +12,9 @@ TotalResources helps teams organize, translate, review, back up, and publish pro
 ## Links
 
 - App Store: [TotalResources](https://apps.apple.com/app/totalresources/id6762512727)
-- Product page: [totaljs.es/totalresources](https://totaljs.es/en/totalresources/)
-- Privacy policy: [totaljs.es/totalresources/privacy](https://totaljs.es/en/totalresources/privacy/)
+- Product page: [totaljs.es/totalresources](https://totaljs.es/totalresources/)
+- Privacy policy: [totaljs.es/totalresources/privacy](https://totaljs.es/totalresources/privacy/)
+- Accessibility: [totaljs.es/totalresources/accessibility](https://totaljs.es/totalresources/accessibility/)
 
 ## What this repository contains
 
