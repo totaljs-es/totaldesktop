@@ -14,10 +14,7 @@ var Total = Total || F;
 if (!F.is5) $ = this;
 
 var path_resources = PATH.root('resources');
-PATH.exists(path_resources, function(exists) { 
-	if (!exists)
-		PATH.mkdir(path_resources); 
-});
+PATH.mkdir(path_resources);
 
 function authorize($) {
 	if (!desktop_token) {
