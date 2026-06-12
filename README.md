@@ -106,14 +106,6 @@ http://localhost:8000/$desktop/
 
 Then enter the matching token in the native app.
 
-## Authentication
-
-Requests must include the configured token in this header:
-
-```text
-x-totaldesktop-token: change-this-token
-```
-
 ## Security notes
 
 - Always use a strong private token.

@@ -8,7 +8,6 @@ const desktop_bridge_version = '1.6.1';
 
 exports.install = function() {
 	ROUTE('GET ' + desktop_url + 'monitor_init', monitor_init);
-	ROUTE('GET ' + desktop_url + 'monitor_status', monitor_status);
 	ROUTE('GET ' + desktop_url + 'monitor', monitor_endpoint);
 	ROUTE('GET ' + desktop_url + 'monitor_live', monitor_live_endpoint);
 	installendpointinstrumentation();
@@ -59,13 +58,6 @@ function monitor_init($) {
 	init($);
 }
 
-function monitor_status($) {
-	if (!authorize($))
-		return;
-
-	$.html(statuspage());
-}
-
 function monitor_endpoint($) {
 	if (!authorize($))
 		return;
@@ -86,68 +78,7 @@ function init($) {
 		app: 'monitor',
 		monitorEndpoint: 'monitor',
 		liveEndpoint: 'monitor_live',
-		statusEndpoint: 'monitor_status',
 		total_version: Total.version + ''
-	});
-}
-
-function statuspage() {
-	var runtime = getruntimeinfo(null);
-	var live = getlivemetrics();
-	var endpoints = getendpointmetrics(null);
-	var title = escapehtml(CONF.name || 'Total.js App');
-	var status = desktop_monitor_token ? 'Protected' : 'Missing token';
-	var mode = CONF.debug ? 'Debug' : 'Release';
-
-	return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TotalMonitor Bridge</title><style>' +
-		':root{color-scheme:dark;--bg:#07111f;--panel:rgba(255,255,255,.07);--line:rgba(255,255,255,.13);--text:#f4f7fb;--muted:rgba(244,247,251,.68);--soft:rgba(244,247,251,.48);--green:#8cc63f;--blue:#5ea4ff;--orange:#ff9d45;--radius:22px}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);background:linear-gradient(115deg,rgba(94,164,255,.15),transparent 28%,rgba(140,198,63,.12) 58%,transparent),linear-gradient(180deg,#06101d,#0a1625 45%,#09111d)}body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(105deg,rgba(255,255,255,.032) 0 1px,transparent 1px 78px);opacity:.8}.wrap{position:relative;width:min(1080px,calc(100% - 32px));margin:0 auto;padding:54px 0}.hero{display:grid;gap:22px;padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.035)),linear-gradient(90deg,rgba(94,164,255,.1),transparent 48%,rgba(140,198,63,.08));box-shadow:0 24px 70px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.18);backdrop-filter:blur(22px) saturate(160%)}.brand{display:flex;align-items:center;gap:18px}.logo{width:64px;height:64px;display:grid;place-items:center;border-radius:18px;background:rgba(140,198,63,.16);border:1px solid rgba(140,198,63,.32);color:var(--green);font-weight:900;font-size:26px}.eyebrow{margin:0;color:var(--green);font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}h1{margin:2px 0 0;font-size:clamp(30px,5vw,54px);line-height:1.02;letter-spacing:0}.lead{max-width:760px;margin:0;color:var(--muted);font-size:17px;line-height:1.65}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}.card{padding:18px;border-radius:18px;border:1px solid rgba(255,255,255,.1);background:var(--panel)}.label{display:block;color:var(--soft);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}.value{display:block;margin-top:8px;font-size:22px;font-weight:850}.green{color:var(--green)}.blue{color:var(--blue)}.orange{color:var(--orange)}.section{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{padding:22px;border-radius:var(--radius);border:1px solid var(--line);background:rgba(255,255,255,.045)}h2{margin:0 0 14px;font-size:19px}.row{display:flex;justify-content:space-between;gap:18px;padding:11px 0;border-top:1px solid rgba(255,255,255,.075);color:var(--muted)}.row:first-of-type{border-top:0}.row b{color:var(--text);font-weight:800;text-align:right}.code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;color:rgba(244,247,251,.82)}@media(max-width:780px){.grid,.section{grid-template-columns:1fr}.brand{align-items:flex-start}.logo{width:56px;height:56px}}' +
-		'</style></head><body><main class="wrap"><section class="hero"><div class="brand"><div class="logo">TM</div><div><p class="eyebrow">TotalMonitor Bridge</p><h1>' + title + '</h1></div></div><p class="lead">This Total.js module exposes protected monitoring snapshots, live runtime metrics and route pressure for the TotalMonitor native app.</p><div class="grid">' +
-		statcard('Status', status, desktop_monitor_token ? 'green' : 'orange') +
-		statcard('Mode', mode, 'blue') +
-		statcard('Requests/min', live.minuteProgress && live.minuteProgress.requests != null ? live.minuteProgress.requests : 0, 'blue') +
-		statcard('Endpoints', endpoints.length, 'green') +
-		'</div></section><section class="section"><div class="panel"><h2>Runtime</h2>' +
-		row('Node', process.version) +
-		row('Total.js', Total.version + '') +
-		row('PID', process.pid) +
-		row('Uptime', Math.round(process.uptime()) + ' sec') +
-		row('Memory', live.memoryMB + ' MB') +
-		'</div><div class="panel"><h2>Bridge</h2>' +
-		row('Version', desktop_bridge_version) +
-		row('Prefix', desktop_url) +
-		row('Snapshot', 'GET ' + desktop_url + 'monitor') +
-		row('Live', 'GET ' + desktop_url + 'monitor_live') +
-		row('Init', 'GET ' + desktop_url + 'monitor_init') +
-		'</div></section><section class="section"><div class="panel"><h2>Host</h2>' +
-		row('Hostname', runtime.host.hostname || '') +
-		row('Platform', runtime.host.platform + ' ' + (runtime.host.arch || '')) +
-		row('CPU cores', runtime.host.cpuCount || 0) +
-		row('Memory used', runtime.host.usedMemoryMB + ' MB') +
-		row('Docker', runtime.docker.isDocker ? 'Yes' : 'No') +
-		'</div><div class="panel"><h2>Security</h2>' +
-		rowraw('Token header', '<span class="code">x-totaldesktop-token</span>') +
-		row('Resources compatible', 'Yes') +
-		row('Public secrets', 'None') +
-		row('Recommended transport', 'HTTPS') +
-		row('App', 'TotalMonitor') +
-		'</div></section></main></body></html>';
-}
-
-function statcard(label, value, color) {
-	return '<div class="card"><span class="label">' + escapehtml(label) + '</span><span class="value ' + color + '">' + escapehtml(value) + '</span></div>';
-}
-
-function row(label, value) {
-	return '<div class="row"><span>' + escapehtml(label) + '</span><b>' + escapehtml(value) + '</b></div>';
-}
-
-function rowraw(label, value) {
-	return '<div class="row"><span>' + escapehtml(label) + '</span><b>' + value + '</b></div>';
-}
-
-function escapehtml(value) {
-	return (value == null ? '' : value + '').replace(/[&<>"']/g, function(c) {
-		return c === '&' ? '&amp;' : c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '"' ? '&quot;' : '&#39;';
 	});
 }
 
