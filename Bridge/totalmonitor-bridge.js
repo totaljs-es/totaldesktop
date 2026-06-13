@@ -3,13 +3,13 @@
 
 const desktop_token = CONF.desktop_token || '';
 const desktop_monitor_token = CONF.desktop_monitor_token || desktop_token;
-const desktop_url = normalizeDesktopURL(CONF.desktop_url || '/$desktop/');
-const desktop_bridge_version = '1.6.1';
+const desktop_monitor_url = normalizeDesktopURL(CONF.desktop_monitor_url || CONF.desktop_url || '/$desktop/');
+const desktop_monitor_bridge_version = '1.6.1';
 
 exports.install = function() {
-	ROUTE('GET ' + desktop_url + 'monitor_init', monitor_init);
-	ROUTE('GET ' + desktop_url + 'monitor', monitor_endpoint);
-	ROUTE('GET ' + desktop_url + 'monitor_live', monitor_live_endpoint);
+	ROUTE('GET ' + desktop_monitor_url + 'monitor_init', monitor_init);
+	ROUTE('GET ' + desktop_monitor_url + 'monitor', monitor_endpoint);
+	ROUTE('GET ' + desktop_monitor_url + 'monitor_live', monitor_live_endpoint);
 	installendpointinstrumentation();
 };
 
@@ -130,7 +130,7 @@ function buildmonitorpayload(snapshot, err, bridgeProcessingMs, sourceFile) {
 
 	return {
 		success: !err,
-		bridge: desktop_bridge_version,
+		bridge: desktop_monitor_bridge_version,
 		pid: snapshot.pid || process.pid,
 		date: snapshot.date || new Date().toISOString(),
 		stats: stats,
@@ -183,7 +183,7 @@ function buildlivepayload(bridgeProcessingMs) {
 
 	return {
 		success: true,
-		bridge: desktop_bridge_version,
+		bridge: desktop_monitor_bridge_version,
 		pid: process.pid,
 		date: new Date().toISOString(),
 		stats: [],
@@ -511,7 +511,7 @@ function resolvestatuscode(req, res) {
 
 function isdesktopmonitorrequest(req) {
 	var url = (req.uri && req.uri.pathname) || req.url || '';
-	return url.indexOf(desktop_url) === 0;
+	return url.indexOf(desktop_monitor_url) === 0;
 }
 
 function resetendpointminute(metric, minute) {

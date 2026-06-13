@@ -84,9 +84,20 @@ When both modules are installed, they behave like a single TotalDesktop bridge:
 they share the same route prefix and token, so users only need to configure one
 bridge URL and one token in the native apps.
 
-If you prefer to isolate them, you can modify the configuration lines near the
-top of each module and give each module its own token or route prefix before
-deploying it.
+## Independent bridge behavior
+
+If you prefer to isolate the apps, configure each module with its own token or
+route prefix:
+
+```js
+desktop_resources_token : resources-token
+desktop_resources_url   : /$resources/
+
+desktop_monitor_token   : monitor-token
+desktop_monitor_url     : /$monitor/
+```
+
+Each app should then use its matching bridge URL and token.
 
 ## Connect the apps
 

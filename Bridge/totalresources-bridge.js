@@ -3,13 +3,13 @@
 
 const desktop_token = CONF.desktop_token || '';
 const desktop_resources_token = CONF.desktop_resources_token || desktop_token;
-const desktop_url = normalizeDesktopURL(CONF.desktop_url || '/$desktop/');
+const desktop_resources_url = normalizeDesktopURL(CONF.desktop_resources_url || CONF.desktop_url || '/$desktop/');
 const desktop_resources_bridge_version = '1.1.0';
 
 exports.install = function() {
-	ROUTE('GET ' + desktop_url + 'resources_init', resources_init);
-	ROUTE('GET ' + desktop_url + 'resources', resources_read_endpoint);
-	ROUTE('POST ' + desktop_url + 'resources', resources_save_endpoint);
+	ROUTE('GET ' + desktop_resources_url + 'resources_init', resources_init);
+	ROUTE('GET ' + desktop_resources_url + 'resources', resources_read_endpoint);
+	ROUTE('POST ' + desktop_resources_url + 'resources', resources_save_endpoint);
 };
 
 var Total = Total || F;
