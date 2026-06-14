@@ -4,12 +4,13 @@
 const desktop_token = CONF.desktop_token || '';
 const desktop_resources_token = CONF.desktop_resources_token || desktop_token;
 const desktop_resources_url = normalizeDesktopURL(CONF.desktop_resources_url || CONF.desktop_url || '/$desktop/');
-const desktop_resources_bridge_version = '1.1.0';
+const desktop_resources_bridge_version = '1.2.0';
 
 exports.install = function() {
 	ROUTE('GET ' + desktop_resources_url + 'resources_init', resources_init);
 	ROUTE('GET ' + desktop_resources_url + 'resources', resources_read_endpoint);
 	ROUTE('POST ' + desktop_resources_url + 'resources', resources_save_endpoint);
+	ROUTE('GET ' + desktop_resources_url + 'resources_restore', resources_restore_endpoint);
 };
 
 var Total = Total || F;
@@ -64,6 +65,13 @@ function resources_save_endpoint($) {
 	resources_save($);
 }
 
+function resources_restore_endpoint($) {
+	if (!authorize($))
+		return;
+
+	resources_restore($);
+}
+
 function init($) {
 	$.json({
 		name: CONF.name || 'Total.js App',
@@ -72,6 +80,7 @@ function init($) {
 		resourcesEndpoint: 'resources',
 		resourcesReadEndpoint: 'resources',
 		resourcesWriteEndpoint: 'resources',
+		resourcesRestoreEndpoint: 'resources_restore',
 		total_version: Total.version + ''
 	});
 }
@@ -148,6 +157,31 @@ function resources_save($) {
 			language: language,
 			saved: counttranslatedlines(resource)
 		});
+	});
+}
+
+function resources_restore($) {
+	var language = ($.query.language || '').toLowerCase().replace(/-/g, '_');
+
+	if (!language || !/^[a-z]{2}(?:_[a-z0-9]{2,8})?$/.test(language)) {
+		$.invalid(400);
+		return;
+	}
+
+	var filename = language + '.resource';
+	var content = readtextfile(PATH.root('resources/' + filename));
+
+	if (content === null) {
+		$.invalid(404);
+		return;
+	}
+
+	$.json({
+		success: true,
+		bridge: desktop_resources_bridge_version,
+		language: language,
+		resource: content,
+		count: counttranslatedlines(content)
 	});
 }
 
