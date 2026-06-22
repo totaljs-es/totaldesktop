@@ -1,61 +1,74 @@
-# TotalDesktop Bridges
+# TotalDesktop
 
-Public Total.js bridge modules for the TotalDesktop native apps.
+Public companion code for the **TotalDesktop** family of native tools for
+Total.js developers, by **Spanish Total.js**.
 
-These modules are installed inside your Total.js applications and expose small,
-token-protected APIs that the macOS and iPadOS apps can use without requiring
-direct database, filesystem or server access.
+The native apps are distributed through the App Store. This repository holds the
+open pieces that live **inside your own Total.js projects**:
 
-## Included modules
+- **Bridge modules** — small, token-protected APIs that let the macOS / iPadOS
+  apps work with your project without direct database, filesystem or server
+  access.
+- **TotalCampus companion** — the complete reference app and language pack that
+  go with the TotalCampus learning app.
 
-- [Bridge/totalresources-bridge.js](./Bridge/totalresources-bridge.js) for **TotalResources**
-- [Bridge/totalmonitor-bridge.js](./Bridge/totalmonitor-bridge.js) for **TotalMonitor**
+Links: [totaldesktop.totaljs.es](https://totaldesktop.totaljs.es/) · [totaljs.com](https://www.totaljs.com/)
 
-The native apps are distributed through the App Store. This repository contains
-the public bridge modules that run inside your own Total.js projects, plus
-companion resources for some apps (see [`TotalCampus/`](./TotalCampus/)).
+## Repository contents
 
-## Apps
+```text
+totaldesktop/
+  Bridge/        # bridge modules you copy into your Total.js app
+  TotalCampus/   # companion resources for the TotalCampus app
+```
+
+| Path | What it is |
+|------|------------|
+| [`Bridge/totalresources-bridge.js`](./Bridge/totalresources-bridge.js) | Bridge module for **TotalResources** |
+| [`Bridge/totalmonitor-bridge.js`](./Bridge/totalmonitor-bridge.js) | Bridge module for **TotalMonitor** |
+| [`TotalCampus/`](./TotalCampus/) | The complete **Tasker** reference app + importable language pack |
+
+## The apps
 
 ### TotalResources
 
-TotalResources helps teams organize, translate, review, back up and publish
-Total.js `.resource` files from a focused native workspace.
-
-Product links:
+Helps teams organize, translate, review, back up and publish Total.js
+`.resource` files from a focused native workspace. *(Uses a bridge module.)*
 
 - App Store: [TotalResources](https://apps.apple.com/app/totalresources/id6762512727)
 - Product page: [totaldesktop.totaljs.es/totalresources](https://totaldesktop.totaljs.es/totalresources/)
-- Privacy policy: [totaldesktop.totaljs.es/totalresources/privacy](https://totaldesktop.totaljs.es/totalresources/privacy/)
-- Accessibility: [totaldesktop.totaljs.es/totalresources/accessibility](https://totaldesktop.totaljs.es/totalresources/accessibility/)
+- [Privacy](https://totaldesktop.totaljs.es/totalresources/privacy/) · [Accessibility](https://totaldesktop.totaljs.es/totalresources/accessibility/)
 
 ### TotalMonitor
 
-TotalMonitor is a calm operations dashboard for Total.js projects. It watches
-bridge reachability, runtime metrics, traffic, health signals, alerts and
-optional AI-assisted early-warning context.
-
-Product links:
+A calm operations dashboard for Total.js projects: bridge reachability, runtime
+metrics, traffic, health signals, alerts and optional AI-assisted early-warning
+context. *(Uses a bridge module.)*
 
 - App Store: [TotalMonitor](https://apps.apple.com/app/totalmonitor/id6762515811)
 - Product page: [totaldesktop.totaljs.es/totalmonitor](https://totaldesktop.totaljs.es/totalmonitor/)
-- Privacy policy: [totaldesktop.totaljs.es/totalmonitor/privacy](https://totaldesktop.totaljs.es/totalmonitor/privacy/)
-- Accessibility: [totaldesktop.totaljs.es/totalmonitor/accessibility](https://totaldesktop.totaljs.es/totalmonitor/accessibility/)
+- [Privacy](https://totaldesktop.totaljs.es/totalmonitor/privacy/) · [Accessibility](https://totaldesktop.totaljs.es/totalmonitor/accessibility/)
 
 ### TotalCampus
 
-TotalCampus teaches Total.js — backend (Total.js 5) and frontend (jComponent
-v20) — by building a real app called **Tasker**, from absolute beginner to
-developer. This repo includes its companion resources (not a bridge module):
+Teaches Total.js — backend (Total.js 5) and frontend (jComponent v20) — by
+building a real app called **Tasker**, from absolute beginner to developer.
+*(Ships companion resources here, not a bridge — see
+[TotalCampus companion](#totalcampus-companion) below.)*
 
-- Companion resources: [`TotalCampus/`](./TotalCampus/) — the complete, commented
-  **Tasker** reference app and the importable **language pack** template.
 - Product page: [totaldesktop.totaljs.es](https://totaldesktop.totaljs.es/)
 
-## Installation
+---
 
-Copy the bridge module or modules you need into the `modules` folder of your
-Total.js application:
+## Bridge modules
+
+> Applies to the **TotalResources** and **TotalMonitor** bridges only.
+> TotalCampus does not use a bridge.
+
+### Install
+
+Copy the bridge module(s) you need into the `modules` folder of your Total.js
+application:
 
 ```text
 your-totaljs-app/
@@ -64,9 +77,10 @@ your-totaljs-app/
     totalmonitor-bridge.js
 ```
 
-You can install only one module, or both modules together.
+Install just one or both. Restart your Total.js application after installing or
+updating a bridge module.
 
-## Configuration
+### Configure
 
 Add a private token to your Total.js config:
 
@@ -74,32 +88,19 @@ Add a private token to your Total.js config:
 desktop_token : change-this-token
 ```
 
-Both modules use `CONF.desktop_token` by default.
-
-Optionally configure the shared bridge route prefix:
+Both modules use `CONF.desktop_token` by default. Optionally set the shared
+bridge route prefix (default `/$desktop/`):
 
 ```js
 desktop_url : /$desktop/
 ```
 
-If `CONF.desktop_url` is not defined, the default prefix is:
+**Shared mode (default).** With both modules installed they behave like a single
+TotalDesktop bridge — same route prefix and token — so the native apps need only
+one bridge URL and one token.
 
-```text
-/$desktop/
-```
-
-Restart your Total.js application after installing or updating bridge modules.
-
-## Shared bridge behavior
-
-When both modules are installed, they behave like a single TotalDesktop bridge:
-they share the same route prefix and token, so users only need to configure one
-bridge URL and one token in the native apps.
-
-## Independent bridge behavior
-
-If you prefer to isolate the apps, configure each module with its own token or
-route prefix:
+**Independent mode.** To isolate the apps, give each module its own token and
+prefix:
 
 ```js
 desktop_resources_token : resources-token
@@ -109,51 +110,48 @@ desktop_monitor_token   : monitor-token
 desktop_monitor_url     : /$monitor/
 ```
 
-Each app should then use its matching bridge URL and token.
+Each app then uses its matching bridge URL and token.
 
-## Connect the apps
+### Connect the apps
 
-Use the public or local URL of your Total.js application with the bridge prefix.
-
-Production example:
+Use your application's URL with the bridge prefix, then enter the matching token
+in the native app:
 
 ```text
+# production
 https://your-domain.com/$desktop/
-```
 
-Local development example:
-
-```text
+# local development
 http://localhost:8000/$desktop/
 ```
 
-Then enter the matching token in the native app.
+### Update
 
-## Security notes
+Replace the module file in your app's `modules` folder and restart. The bridge
+files are standalone JavaScript modules, so deployment stays simple across small
+servers, Docker containers and production hosts.
 
-- Always use a strong private token.
-- Do not commit real production tokens to your repository.
+### Security notes
+
+- Always use a strong private token; rotate it if you suspect exposure.
+- Never commit real production tokens.
 - Use HTTPS for remote projects whenever possible.
 - Keep the bridge route private to your team and TotalDesktop apps.
-- Rotate the token if you believe it has been exposed.
-- Install only the modules you need for a given Total.js application.
+- Install only the modules you need.
 
-## Updating
+---
 
-Replace the module file in your app's `modules` folder and restart the Total.js
-application.
+## TotalCampus companion
 
-The bridge files are intentionally standalone JavaScript modules, so deployment
-can stay simple across small servers, Docker containers and production hosts.
+Companion resources for the **TotalCampus** learning app — not a bridge:
+
+- **[`TotalCampus/tasker/`](./TotalCampus/tasker/)** — the complete, commented
+  **Tasker** reference app (a runnable Total.js 5 project). Every file notes the
+  module that taught it, so you can build along and compare. See its
+  [README](./TotalCampus/tasker/README.md) for the lesson map and how to run it.
+- **[`TotalCampus/languages/`](./TotalCampus/languages/)** — the importable
+  **language pack template** to translate the whole app (interface + course).
 
 ## License
 
 The public bridge modules are released under the MIT license. See [LICENSE](./LICENSE).
-
-## About
-
-TotalDesktop is a family of native tools for Total.js developers by
-**Spanish Total.js**.
-
-- TotalDesktop suite: [totaldesktop.totaljs.es](https://totaldesktop.totaljs.es/)
-- Total.js framework: [totaljs.com](https://www.totaljs.com/)
