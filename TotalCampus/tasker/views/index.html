@@ -1,0 +1,220 @@
+@{layout('')}
+@{title(CONF.name)}
+<!--
+	Tasker's app — the task list, as a real jComponent v20 single-page app.
+
+	📚 Frontend aula come to life, the v20 way:
+	   • Components from the CDN + a COMPONENTATOR bundle (REPO.tasker).
+	   • A PLUGIN scope with a model bound by path (?.tasks, ?.title…).
+	   • Plain <button class="exec" data-exec="?/method"> — j-Button is gone in v20.
+	   • Two ways to reach the backend, side by side:
+	       - tasks via AJAX to the schema's REST routes (GET/POST/PUT/DELETE);
+	       - auth via TAPI('Login|...') to the login plugin's NEWACTIONs.
+	   • Auth handled by the *login plugin* (see /plugins/login): `+GET /` serves
+	     this page only when logged in; otherwise the plugin's `-GET /` shows login.
+
+	⚠️ Teaching app: it mixes several styles (REST + TAPI, NEWSCHEMA + NEWACTION)
+	   on purpose to show Total.js's range — not a production template.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="robots" content="all,follow" />
+	<link rel="stylesheet" href="//cdn.componentator.com/spa.min@20.css" />
+	<script src="//cdn.componentator.com/spa.min@20.js"></script>
+	<script src="@{REPO.tasker}"></script>
+	@{import('meta', 'head', 'favicon.ico')}
+	<style>
+		body { font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; max-width: 560px; margin: 26px auto; padding: 0 18px; color: #303030; }
+		h1 { margin-bottom: 2px; }
+		.muted { color: #888; font-size: 13px; }
+		.muted .link { background: none; border: 0; color: #4285F4; cursor: pointer; font-size: 13px; padding: 0; }
+		.m { margin: 12px 0; }
+		.button { border: 0; background-color: #4285F4; color: #FFF; height: 36px; padding: 0 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
+		.button:disabled { background-color: #E0E0E0 !important; color: #999 !important; cursor: not-allowed; }
+		.newtask { display: flex; align-items: stretch; gap: 8px; }
+		.newtask .ui-input { flex: 1; margin: 0; }
+		.iconbtn { width: 40px; border: 1px solid #d8d8d8; background: #fff; border-radius: 6px; cursor: pointer; color: #4285F4; font-size: 16px; }
+		.iconbtn:hover { background: #f4f7ff; }
+		.task { display: flex; align-items: center; gap: 10px; padding: 9px 2px; border-bottom: 1px solid #eee; }
+		.task .taskicon { color: #4285F4; width: 18px; text-align: center; }
+		.task .body { flex: 1; }
+		.task .title { display: block; }
+		.task .files { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+		.filechip { display: inline-flex; align-items: center; background: #f0f4ff; border-radius: 4px; padding: 1px 4px 1px 7px; font-size: 12px; }
+		.filechip a { color: #4285F4; text-decoration: none; }
+		.filechip .rmfile { border: 0; background: none; color: #c0392b; cursor: pointer; font-size: 13px; padding: 0 2px; margin-left: 4px; }
+		.attach { border: 0; background: none; color: #888; cursor: pointer; font-size: 15px; }
+		.attach:hover { color: #4285F4; }
+		.task.done .title { text-decoration: line-through; color: #aaa; }
+		.del { background: none; border: 0; color: #c0392b; cursor: pointer; font-size: 13px; }
+		.empty { color: #888; font-size: 13px; padding: 14px 0; }
+	</style>
+</head>
+<body>
+
+	<ui-component name="exec"></ui-component>
+	<ui-component name="loading" class="hidden"></ui-component>
+	<!-- The icon picker (j-Icons) — a singleton; opened with SETTER('icons/show').
+	     Total.js ships ~600 icons, so let the user tag each task with one. -->
+	<ui-component name="icons"></ui-component>
+
+	<ui-plugin path="app">
+
+		<h1>@{CONF.name}</h1>
+		<p class="muted">@(Hi) <b><ui-bind path="?.me.name" config="text"></ui-bind></b> · <button class="link exec" data-exec="?/signout">@(log out)</button></p>
+
+		<!-- Add a task — an icon button (opens the picker) + the title + submit.
+		     Enter or the button submits; validate keeps it disabled until valid. -->
+		<ui-component name="enter" path="?">
+			<div class="newtask">
+				<button class="iconbtn exec" data-exec="?/pickicon" title="@(Choose an icon)">
+					<ui-bind path="?.icon" config="template">
+						<script type="text/html"><i class="{{ value }}"></i></script>
+					</ui-bind>
+				</button>
+				<ui-component name="input" path="?.title" config="required:1;placeholder:@(What needs doing?)" default="''">@(New task)</ui-component>
+			</div>
+			<ui-component name="validate" path="?">
+				<button name="submit" class="button exec" data-exec="?/add" disabled><i class="ti ti-plus mr5"></i>@(Add task)</button>
+			</ui-component>
+		</ui-component>
+
+		<!-- Search filters the rendered .task rows -->
+		<ui-component name="input" path="?.query" config="type:search;placeholder:@(Search tasks)" default="''" class="m">@(Search)</ui-component>
+		<ui-component name="search" path="?.query" config="selector:.task">
+
+			<!-- Empty state -->
+			<ui-component name="empty" path="?.tasks" config="wait:false" class="empty hidden">
+				@(No tasks yet — add your first one above.)
+			</ui-component>
+
+			<!-- The list -->
+			<ui-bind path="?.tasks" config="template">
+				<script type="text/html">
+					{{ foreach m in value }}
+					<div class="task {{ if m.done }}done{{ fi }}" data-search="{{ m.title }}">
+						<input type="checkbox" {{ if m.done }}checked{{ fi }} class="exec" data-exec="app/toggle" data-id="{{ m.id }}" />
+						<i class="taskicon {{ m.icon }}"></i>
+						<div class="body">
+							<span class="title">{{ m.title }}</span>
+							{{ if m.files.length }}
+							<div class="files">
+								{{ foreach f in m.files }}
+								<span class="filechip"><a href="{{ f.url }}" target="_blank"><i class="ti ti-file mr5"></i>{{ f.name }}</a><button class="rmfile exec" data-exec="app/detach" data-id="{{ f.id }}" title="@(Remove file)">×</button></span>
+								{{ end }}
+							</div>
+							{{ fi }}
+						</div>
+						<button class="attach exec" data-exec="app/attach" data-id="{{ m.id }}" title="@(Attach a file)"><i class="ti ti-paperclip"></i></button>
+						<button class="del exec" data-exec="app/remove" data-id="{{ m.id }}">@(Delete)</button>
+					</div>
+					{{ end }}
+				</script>
+			</ui-bind>
+		</ui-component>
+	</ui-plugin>
+
+	<script>
+
+		// TAPI posts to the app's $api scope (config: $api = /api/).
+		DEF.api = '@{CONF.$api}';
+
+		PLUGIN('app', function(exports) {
+
+			// "Who am I?" — `+GET /` already guarantees a session, so this just
+			// fetches the name for the greeting. (If it ever 401s, reload to the
+			// login form.)
+			exports.refresh = function() {
+				exports.set('icon', defaulticon);
+				exports.tapi('Login|account', ERROR(function(user) {
+					exports.set('me', user);
+					exports.load();
+				}, function() {
+					location.reload();
+				}));
+			};
+
+			var defaulticon = 'ti ti-circle';
+
+			// List my tasks (the schema's query action via its REST route).
+			exports.load = function() {
+				AJAX('GET ' + DEF.api + 'tasks/', function(response) {
+					exports.set('tasks', response || []);
+				});
+			};
+
+			// Open the icon picker (j-Icons) anchored to the icon button; store
+			// the chosen icon class on the task being composed.
+			exports.pickicon = function(el) {
+				SETTER('icons/show', {
+					element: el,
+					callback: function(icon) { exports.set('icon', icon); }
+				});
+			};
+
+			// Create a task (the schema's insert action via its REST route).
+			exports.add = function() {
+				var title = exports.get('title');
+				if (!title)
+					return;
+				AJAX('POST ' + DEF.api + 'tasks/', { title: title, icon: exports.get('icon') }, function() {
+					exports.set('title', '');
+					exports.set('icon', defaulticon);   // reset for the next one
+					exports.load();
+				});
+			};
+
+			// Toggle done (single item → REST route by id).
+			exports.toggle = function(el) {
+				var id = el.attrd('id');
+				var tasks = exports.get('tasks') || [];
+				var task = tasks.find(function(t) { return t.id === id; });
+				var done = task ? !task.done : true;
+				AJAX('PUT ' + DEF.api + 'tasks/' + id + '/', { done: done }, function() { exports.load(); });
+			};
+
+			// Delete (single item → REST route by id).
+			exports.remove = function(el) {
+				var id = el.attrd('id');
+				AJAX('DELETE ' + DEF.api + 'tasks/' + id + '/', function() { exports.load(); });
+			};
+
+			// Attach a file to a task: open a file dialog, read it as a base64
+			// data-URI in the browser, and send it to the files plugin by name.
+			exports.attach = function(el) {
+				var taskid = el.attrd('id');
+				var input = document.createElement('input');
+				input.type = 'file';
+				input.onchange = function() {
+					var file = input.files[0];
+					if (!file)
+						return;
+					var reader = new FileReader();
+					reader.onload = function() {
+						TAPI('Files|upload', { taskid: taskid, name: file.name, data: reader.result }, function() { exports.load(); });
+					};
+					reader.readAsDataURL(file);   // -> "data:{mime};base64,..."
+				};
+				input.click();
+			};
+
+			// Remove an attached file.
+			exports.detach = function(el) {
+				TAPI('Files|remove', { id: el.attrd('id') }, function() { exports.load(); });
+			};
+
+			// Sign out via the login plugin, then reload: no session now, so `/`
+			// serves the login form again.
+			exports.signout = function() {
+				exports.tapi('Login|signout', function() { location.reload(); });
+			};
+
+			exports.on('ready', exports.refresh);
+		});
+
+	</script>
+</body>
+</html>

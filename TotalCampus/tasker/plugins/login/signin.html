@@ -1,0 +1,106 @@
+@{layout('')}
+@{title(CONF.name)}
+<!--
+	The login plugin's UI — a real Total.js view (Tangular @{...} is processed,
+	so the framework + components load). Modelled on the official "admin" app's
+	login page, minus the OpenPlatform parts.
+
+	📚 Frontend · Creating a plugin — this page lives inside the plugin and is
+	   served by it at GET /login/. It calls the plugin's NEWACTIONs by name with
+	   exports.tapi('Login|signin', ...) and uses plain <button class="exec"> —
+	   the v20 way (j-Button is gone).
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover" />
+	<meta name="robots" content="all,follow" />
+	<link href="//cdn.componentator.com/spa.min@20.css" rel="stylesheet" />
+	<script src="//cdn.componentator.com/spa.min@20.js"></script>
+	<script src="@{REPO.tasker}"></script>
+	@{import('meta', 'head', 'favicon.ico')}
+	<style>
+		body { background-color: #F2F5FE; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+		.login { max-width: 320px; margin: 8vh auto 0; width: 100%; text-align: left; }
+		.login .card { background-color: #FFF; padding: 28px; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+		h1 { font-size: 20px; margin: 0 0 4px; padding: 0; }
+		h1 i { margin-right: 8px; color: #4285F4; }
+		h2 { font-size: 13px; margin: 0 0 18px; padding: 0; font-weight: normal; color: #888; }
+		.button { width: 100%; border: 0; padding: 9px 10px; font-size: 14px; background-color: #4285F4; color: #FFF; border-radius: 6px; font-weight: bold; outline: 0; cursor: pointer; }
+		.button:hover { opacity: 0.9; }
+		.button:disabled { background-color: #E0E0E0 !important; color: #999 !important; cursor: not-allowed; }
+		.button.link { background: none; color: #4285F4; font-weight: normal; margin-top: 8px; }
+		.error { padding: 6px 0; color: #c0392b; font-size: 13px; }
+		footer { font-size: 11px; color: #999; text-align: center; padding: 14px 0; }
+	</style>
+</head>
+<body>
+
+	<ui-component name="exec"></ui-component>
+
+	<div class="login">
+		<div class="card">
+			<h1><i class="ti ti-circle-check"></i>@{CONF.name}</h1>
+			<h2>@{CONF.tasker_motto}</h2>
+
+			<ui-plugin path="signinform">
+				<ui-component name="enter" path="?">
+					<ui-component name="input" path="?.email" config="required:1;type:email;autofocus:1" default="''" class="m">@(Email)</ui-component>
+					<ui-component name="input" path="?.password" config="required:1;type:password" default="''" class="m">@(Password)</ui-component>
+
+					<ui-bind path="%error" config="show;template" class="error">
+						<script type="text/html"><i class="ti ti-exclamation-triangle mr5"></i>{{ value }}</script>
+					</ui-bind>
+
+					<ui-component name="validate" path="?" style="margin-top:16px">
+						<button name="submit" class="button exec" data-exec="?/signin" disabled><i class="ti ti-sign-in mr5"></i>@(Sign in)</button>
+					</ui-component>
+				</ui-component>
+
+				<button class="button link exec" data-exec="?/register">@(Create an account)</button>
+			</ui-plugin>
+		</div>
+		<footer>Powered by <b>Total.js</b></footer>
+	</div>
+
+	<script>
+
+		// TAPI posts to the app's $api scope (config: $api = /api/).
+		DEF.api = '@{CONF.$api}';
+
+		PLUGIN('signinform', function(exports) {
+
+			// Sign in — call the plugin's NEWACTION by name. On success, reload `/`:
+			// now there's a session, so `+GET /` serves the app instead of this form.
+			exports.signin = function() {
+				SET('%error', '');
+				exports.tapi('Login|signin', exports.form, ERROR(function() {
+					location.reload();
+				}, function(response) {
+					SET('%error', (response && response[0] && response[0].error) || '@(Could not sign in.)');
+				}));
+			};
+
+			// Create an account, then sign straight in.
+			exports.register = function() {
+				var form = exports.form || {};
+				if (!form.email || !form.password) {
+					SET('%error', '@(Enter an email and a password first.)');
+					return;
+				}
+				SET('%error', '');
+				var data = { name: form.email.split('@')[0], email: form.email, password: form.password };
+				exports.tapi('Login|register', data, ERROR(function() {
+					exports.signin();
+				}, function(response) {
+					SET('%error', (response && response[0] && response[0].error) || '@(Could not create the account.)');
+				}));
+			};
+
+		});
+
+	</script>
+
+</body>
+</html>

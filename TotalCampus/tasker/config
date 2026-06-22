@@ -1,0 +1,24 @@
+# Tasker settings.
+# 📚 Module 2 · Anatomy (the `config` file) + Module 6 · Toolbox (read with CONF.key).
+
+name              : Tasker
+version           : 1.0.0
+author            : TotalCampus
+default_timezone  : utc
+
+# Frontend · Going multilingual — default UI language (see /definitions/localization.js).
+# Try the Spanish bundle at runtime with ?language=es
+language          : en
+
+# Module 6 · Config — your own settings, read in code as CONF.tasker_motto
+tasker_motto      : Your tasks, done.
+
+# Module 7 · Users — secret used to encrypt the session cookie
+secret            : change-this-secret-in-production
+cookie            : tasker
+
+# Module 9 · Sharing — SMTP for offline notifications (leave empty to skip real mail)
+mail_smtp         :
+mail_from         : tasker@example.com
+
+$api              : /api/
