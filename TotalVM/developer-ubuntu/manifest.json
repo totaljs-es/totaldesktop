@@ -12,7 +12,26 @@
   "download": "https://github.com/totaljs-es/totaldesktop/releases/download/totalvm-developer-ubuntu-1.0.0/developer.raw.zst",
   "size": null,
   "sha256": null,
-  "icon": "icon.svg",
+  "icon": "icon.png",
+  "accent": "#E95420",
   "description": "Recommended for most developers: a stable, familiar Total.js developer environment on Ubuntu LTS.",
+  "highlights": [
+    {
+      "title": "Stable base",
+      "systemImage": "checkmark.shield"
+    },
+    {
+      "title": "Long-term projects",
+      "systemImage": "calendar"
+    },
+    {
+      "title": "Familiar ecosystem",
+      "systemImage": "person.2"
+    },
+    {
+      "title": "Team-friendly baseline",
+      "systemImage": "building.2"
+    }
+  ],
   "author": "Total.js"
 }

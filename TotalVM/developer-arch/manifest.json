@@ -12,7 +12,26 @@
   "download": "https://github.com/totaljs-es/totaldesktop/releases/download/totalvm-developer-arch-1.0.0/developer.raw.zst",
   "size": null,
   "sha256": null,
-  "icon": "icon.svg",
+  "icon": "icon.png",
+  "accent": "#1793D1",
   "description": "For advanced Linux users: the same Total.js developer experience on a rolling Arch Linux base.",
+  "highlights": [
+    {
+      "title": "Newer packages",
+      "systemImage": "sparkles"
+    },
+    {
+      "title": "Fast iteration",
+      "systemImage": "bolt"
+    },
+    {
+      "title": "Lightweight base",
+      "systemImage": "leaf"
+    },
+    {
+      "title": "Closer to upstream",
+      "systemImage": "arrow.up.forward"
+    }
+  ],
   "author": "Total.js"
 }

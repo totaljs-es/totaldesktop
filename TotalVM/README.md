@@ -74,11 +74,22 @@ Choosing one is mostly about the Linux base you prefer.
   "download": "https://github.com/totaljs-es/totaldesktop/releases/download/totalvm-developer-ubuntu-1.0.0/developer.raw.zst",
   "size": null,
   "sha256": null,
-  "icon": "icon.svg",
+  "icon": "icon.png",
+  "accent": "#E95420",
   "description": "Recommended for most developers: a stable, familiar Total.js developer environment on Ubuntu LTS.",
+  "highlights": [
+    {
+      "title": "Stable base",
+      "systemImage": "checkmark.shield"
+    }
+  ],
   "author": "Total.js"
 }
 ```
+
+The app resolves `manifest`, `icon` and `download` from the manifest data. Use
+`icon.png` for best compatibility; SVG also works when supported by macOS.
+`systemImage` values are SF Symbols used for the short highlight list.
 
 ## Publishing a new version
 
