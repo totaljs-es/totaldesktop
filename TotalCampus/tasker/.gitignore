@@ -1,8 +1,0 @@
-node_modules
-databases/*.nosql
-databases/*.table
-databases/fs-*
-*.pid
-*.js.json
-*.js.map
-.DS_Store
