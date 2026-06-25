@@ -11,7 +11,7 @@
     },
     {
       "id": "developer-arch",
-      "name": "Total.js Developer (Arch)",
+      "name": "Total.js Developer (Arch Linux)",
       "manifest": "developer-arch/manifest.json",
       "official": true
     }

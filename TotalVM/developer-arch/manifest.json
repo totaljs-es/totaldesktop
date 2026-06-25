@@ -1,6 +1,6 @@
 {
   "id": "developer-arch",
-  "name": "Total.js Developer (Arch)",
+  "name": "Total.js Developer (Arch Linux)",
   "version": "1.0.0",
   "os": "arch",
   "arch": "arm64",
@@ -9,10 +9,10 @@
   "memory": 4096,
   "cpus": 4,
   "disk": 40,
-  "download": "https://github.com/totaljs/totalvm-images/releases/download/developer-arch-1.0.0/developer.raw.zst",
-  "size": 0,
-  "sha256": "",
+  "download": "https://github.com/totaljs-es/totaldesktop/releases/download/totalvm-developer-arch-1.0.0/developer.raw.zst",
+  "size": null,
+  "sha256": null,
   "icon": "icon.svg",
-  "description": "Rolling Total.js development environment on Arch with the shared Total.js desktop layer, developer tools and workflow.",
+  "description": "For advanced Linux users: the same Total.js developer experience on a rolling Arch Linux base.",
   "author": "Total.js"
 }
