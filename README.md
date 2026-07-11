@@ -9,8 +9,8 @@ open pieces that live **inside your own Total.js projects**:
 - **Bridge modules** — small, token-protected APIs that let the macOS / iPadOS
   apps work with your project without direct database, filesystem or server
   access.
-- **TotalCampus companion** — the complete reference app and language pack that
-  go with the TotalCampus learning app.
+- **TotalCampus companion** — the complete Tasker reference app that goes with
+  the TotalCampus learning app.
 
 Links: [totaldesktop.totaljs.es](https://totaldesktop.totaljs.es/) · [totaljs.com](https://www.totaljs.com/)
 
@@ -26,7 +26,7 @@ totaldesktop/
 |------|------------|
 | [`Bridge/totalresources-bridge.js`](./Bridge/totalresources-bridge.js) | Bridge module for **TotalResources** |
 | [`Bridge/totalmonitor-bridge.js`](./Bridge/totalmonitor-bridge.js) | Bridge module for **TotalMonitor** |
-| [`TotalCampus/`](./TotalCampus/) | The complete **Tasker** reference app + importable language pack |
+| [`TotalCampus/`](./TotalCampus/) | The complete **Tasker** reference app |
 
 ## The apps
 

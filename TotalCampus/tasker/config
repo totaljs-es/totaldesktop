@@ -6,10 +6,6 @@ version           : 1.0.0
 author            : TotalCampus
 default_timezone  : utc
 
-# Frontend · Going multilingual — default UI language (see /definitions/localization.js).
-# Try the Spanish bundle at runtime with ?language=es
-language          : en
-
 # Module 6 · Config — your own settings, read in code as CONF.tasker_motto
 tasker_motto      : Your tasks, done.
 

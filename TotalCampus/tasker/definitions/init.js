@@ -11,7 +11,7 @@ ON('ready', function() {
 
 	// Builds public/ui-tasker-*.min.js from the CDN and exposes it as REPO.tasker.
 	// These are the jComponent v20 components our two pages use (admin-style):
-	// the login view (input/enter/validate/exec) and the task app (repeater/
-	// empty/search). `intranetcss` brings the built-in form styling.
+	// the login view (input/enter/validate/exec) and the task app (ui-bind
+	// templates/empty/search). `intranetcss` brings the built-in form styling.
 	COMPONENTATOR('tasker', 'exec,loading,input,enter,validate,empty,search,intranetcss,message,icons', true);
 });

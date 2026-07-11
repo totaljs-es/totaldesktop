@@ -10,9 +10,6 @@ teaches [Total.js](https://www.totaljs.com) — backend (Total.js 5) and fronten
   reference project. Every file is commented with the **module that taught it**,
   so you can build along in your own editor and compare. See
   [`tasker/README.md`](./tasker/README.md) for the lesson map and how to run it.
-- **[`languages/`](./languages/)** — the importable **language pack template** to
-  translate the whole app (interface + course) into your language. See
-  [`languages/README.md`](./languages/README.md).
 
 ## About the app
 

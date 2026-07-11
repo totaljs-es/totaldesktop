@@ -54,8 +54,6 @@ curl -b cookie.txt http://localhost:8000/api/tasks/
 | `definitions/audit.js` | `DEF.onAudit` — where audit logs go | **M6** · Audit |
 | `definitions/notify.js` | WebSocket channel, notify (live/email), CRON reminders | **M8** · real-time · **M9** · sharing & reminders |
 | `definitions/init.js` | Startup hooks + `COMPONENTATOR` (builds `REPO.tasker`) | **M2** · definitions · **M6** · toolbox |
-| `definitions/localization.js` | `LOCALIZE` — pick the UI language per request | **Frontend** · Going multilingual |
-| `resources/*.resource` | Translations of the `@()` strings (es, it, de, sk, fr) | **Frontend** · Going multilingual |
 | `plugins/login/index.js` | Accounts the **NEWACTION** way (`route:'API ?'`) + serves `-GET /` | **Frontend** · Creating a plugin |
 | `plugins/login/signin.html` | The login UI — `ui-plugin` + `PLUGIN` + `TAPI('Login|signin')` | **Frontend** · Creating a plugin |
 | `plugins/files/index.js` | Attach files to tasks — `FILESTORAGE` + `DataURI` upload + FILE download | **Frontend** · Working with files |
@@ -65,7 +63,6 @@ curl -b cookie.txt http://localhost:8000/api/tasks/
 ### A few touches worth noting
 
 - **Auth by routing**: `+GET /` serves the app only when logged in; the login plugin's `-GET /` serves the form otherwise. Signing in `reload()`s and the app appears.
-- **Multilingual**: UI strings are wrapped in `@(...)`; `LOCALIZE` chooses the language; translations live in `/resources/*.resource` (generate the template with `total5 translate`). Ships with **es, it, de, sk, fr** — try **`/?language=de`** (or `es`, `it`, `sk`, `fr`).
 - **Icons**: the new-task input has an icon button that opens the **j-Icons** picker (Total.js ships ~600 icons) and tags the task.
 - **Attachments**: each task has a 📎 button — files go to the built-in **FILESTORAGE** (no external service) and download from a public FILE route.
 
