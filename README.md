@@ -149,8 +149,6 @@ Companion resources for the **TotalCampus** learning app — not a bridge:
   **Tasker** reference app (a runnable Total.js 5 project). Every file notes the
   module that taught it, so you can build along and compare. See its
   [README](./TotalCampus/tasker/README.md) for the lesson map and how to run it.
-- **[`TotalCampus/languages/`](./TotalCampus/languages/)** — the importable
-  **language pack template** to translate the whole app (interface + course).
 
 ## License
 
