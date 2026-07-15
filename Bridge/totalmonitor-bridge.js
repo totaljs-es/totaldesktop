@@ -15,7 +15,7 @@ exports.install = function() {
 
 var previouscpusnapshot = null;
 var Total = Total || F;
-if (!F.is5)	var $ = this;
+if (!F.is5)	$ = this;
 
 var performance_hooks = loadperformancehooks();
 var eventloopmonitor = createeventloopmonitor(performance_hooks);
