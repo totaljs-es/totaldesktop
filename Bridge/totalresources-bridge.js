@@ -14,7 +14,7 @@ exports.install = function() {
 };
 
 var Total = Total || F;
-if (!F.is5) $ = this;
+if (!F.is5) var $ = this;
 
 var path_resources = PATH.root('resources');
 PATH.mkdir(path_resources);
