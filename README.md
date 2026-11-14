@@ -1,4 +1,12 @@
-# TotalDesktop
+<p align="center"><img src="https://raw.githubusercontent.com/totaljs-es/toto/main/assets/brand/favicon-192.png" width="128" height="128" alt="Toto, the fox of Spanish Total.js" /></p>
+
+<h1 align="center">TotalDesktop</h1>
+
+<p align="center">
+  <a href="https://totaldesktop.totaljs.es"><img src="https://img.shields.io/badge/platform-macOS%20%7C%20iPadOS-0078d4" alt="macOS and iPadOS" /></a>
+  <a href="https://www.totaljs.com"><img src="https://img.shields.io/badge/for-Total.js-f26d21" alt="For Total.js" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/totaljs-es/totaldesktop" alt="MIT license" /></a>
+</p>
 
 Public companion code for the **TotalDesktop** family of native tools for
 Total.js developers, by **Spanish Total.js**.
